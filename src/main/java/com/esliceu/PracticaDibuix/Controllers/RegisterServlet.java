@@ -37,8 +37,6 @@ public class RegisterServlet extends HttpServlet {
         usuari.setNomICognoms(nomICognoms);
         userServices.register(usuari);
 
-        System.out.println("DEBUG : SE HA REGISTRADO");
-
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
         disp.forward(req, resp);
     }

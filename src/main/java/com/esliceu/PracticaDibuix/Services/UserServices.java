@@ -8,5 +8,7 @@ public class UserServices {
 
     public void register(User usuari) {
 
+        UserDAOImpl userDAO = new UserDAOImpl();
+        userDAO.saveUser(usuari);
     }
 }

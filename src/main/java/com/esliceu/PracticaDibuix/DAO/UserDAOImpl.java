@@ -13,10 +13,11 @@ public class UserDAOImpl implements UserDAO{
     public void saveUser(User usuari) {
 
         for (User user : usuaris) {
-            if (user.getNomUsuari().equals(usuari.getNomUsuari())) {
+            if (user.getNomUsuari().equalsIgnoreCase(usuari.getNomUsuari())) {
                 return;
             }
-            usuaris.add(usuari);
         }
+        usuaris.add(usuari);
+        System.out.println("Lista: " + usuaris.size());
     }
 }
