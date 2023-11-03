@@ -2,24 +2,30 @@ package com.esliceu.PracticaDibuix.Model;
 
 public class User {
 
-    private String nomUsuari;
-    private String nomICognoms;
+    private String userName;
+    private String nameAndLastName;
     private String password;
 
-    public String getNomUsuari() {
-        return nomUsuari;
+    public String getNameAndLastName() {
+        return nameAndLastName;
     }
 
-    public void setNomUsuari(String nomUsuari) {
-        this.nomUsuari = nomUsuari;
+    public void setNameAndLastName(String nameAndLastName) {
+        this.nameAndLastName = nameAndLastName;
     }
 
-    public String getNomICognoms() {
-        return nomICognoms;
+    public User(String userName, String nameAndLastName, String password) {
+        this.userName = userName;
+        this.nameAndLastName = nameAndLastName;
+        this.password = password;
     }
 
-    public void setNomICognoms(String nomICognoms) {
-        this.nomICognoms = nomICognoms;
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {

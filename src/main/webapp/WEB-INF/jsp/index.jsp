@@ -13,31 +13,26 @@ isELIgnored="false"
 </head>
 <body>
 
-<h1>Register</h1>
+<h1>Login</h1>
 
-<form action="/register" method="post">
-
-    <p>
-        Name and last name:
-    </p>
-    <input type="text" name="nameAndLastName" required/>
+<form action="/" method="post">
 
     <p>
         User name:
     </p>
-    <input type="text" name="userName" required/>
+    <input type="text" name="userName"/>
 
     <p>
         Password:
     </p>
-    <input type="password" name="password" required/>
+    <input type="password" name="password"/>
 
-    <p><input type="submit" value="registert!!"></p>
+    <p><input type="submit" value="Login"></p>
       <c:if test="${!empty error}">
         ${error}
       </c:if>
 
-    <a href="/"><p>Login</p></a>
+    <a href="/register"><p>Register</p></a>
 </form>
 
 </body>

@@ -9,5 +9,8 @@
         <module name="PracticaDibuix" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="PracticaDibuix" target="9" />
+    </bytecodeTargetLevel>
   </component>
 </project>

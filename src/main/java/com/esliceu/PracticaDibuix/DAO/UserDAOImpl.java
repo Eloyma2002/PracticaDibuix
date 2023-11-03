@@ -1,5 +1,7 @@
 package com.esliceu.PracticaDibuix.DAO;
 
+import com.esliceu.PracticaDibuix.Exceprions.UserDoesntExist;
+import com.esliceu.PracticaDibuix.Exceprions.UserExist;
 import com.esliceu.PracticaDibuix.Model.User;
 
 import java.util.ArrayList;
@@ -7,17 +9,28 @@ import java.util.List;
 
 public class UserDAOImpl implements UserDAO{
 
-    static List<User> usuaris = new ArrayList<>();
+    static List<User> users = new ArrayList<>();
 
     @Override
-    public void saveUser(User usuari) {
+    public void saveUser(User user1) throws UserExist {
 
-        for (User user : usuaris) {
-            if (user.getNomUsuari().equalsIgnoreCase(usuari.getNomUsuari())) {
-                return;
+        for (User user : users) {
+            if (user.getUserName().equalsIgnoreCase(user1.getUserName())) {
+                throw new UserExist();
             }
         }
-        usuaris.add(usuari);
-        System.out.println("Lista: " + usuaris.size());
+        users.add(user1);
+        System.out.println(users.get(users.size()-1).getUserName());
+    }
+
+    @Override
+    public User getUser(String userName, String password) throws UserDoesntExist {
+
+        for (User user: users) {
+            if (user.getUserName().equalsIgnoreCase(userName) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        return null;
     }
 }
