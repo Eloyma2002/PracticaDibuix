@@ -35,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
         User user = new User(userName, nameAndLastName, password);
         try {
             userServices.register(user);
-            resp.sendRedirect("/");
+            resp.sendRedirect("/login");
         } catch (UserExist userExist) {
             req.setAttribute("error", "User already exist");
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/register.jsp");

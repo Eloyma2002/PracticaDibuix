@@ -9,11 +9,17 @@ isELIgnored="false"
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERROR</title>
+    <title>Geoform</title>
+    <link rel="stylesheet" href="/src/main/webapp/css/styles.css">
 </head>
 <body>
+    <h1>Geoform</h1>
 
-<h1>Hola q tal</h1>
+    <canvas height="400" width="400" id="canvas1"></canvas>
+    <br>
+    <button>Clean</button>
+    <button>Send</button>
+    <button>Draw</button>
 
 </body>
 </html>

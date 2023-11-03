@@ -9,13 +9,13 @@ isELIgnored="false"
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRE</title>
+    <title>Login</title>
 </head>
 <body>
 
 <h1>Login</h1>
 
-<form action="/" method="post">
+<form action="/login" method="post">
 
     <p>
         User name:

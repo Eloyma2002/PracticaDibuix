@@ -37,7 +37,7 @@ isELIgnored="false"
         ${error}
       </c:if>
 
-    <a href="/"><p>Login</p></a>
+    <a href="/login"><p>Login</p></a>
 </form>
 
 </body>
