@@ -5,38 +5,44 @@ const colorInput = document.querySelector("#color");
 const checkbox = document.querySelector("#fill");
 const rangeInput = document.querySelector("#size");
 const nameImage = document.querySelector('#name');
-const clean = document.querySelector('#clean');
-const figuresList = [];
+const buttonClean = document.querySelector('#clean');
+const inputJSON = document.querySelector('#JSON');
+const list = document.querySelector('#list');
+const buttonDraw = document.querySelector('#draw');
+
 
 canvas.width = 400;
 canvas.height = 400;
 
+let draw = false;
 let figureSelected = select.value;
 let color = colorInput.value;
 let checked = checkbox.checked;
 let size = rangeInput.value;
 let x, y;
+let cont = 0;
+let numFigures = 0;
+let content = [];
+let strings = {
+    "content" : content
+};
 
-class Figure {
-    constructor(type, x, y, size, index) {
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.index = index;
-    }
-}
+buttonDraw.addEventListener("click", function () {
+    draw = !draw;
+});
 
+
+
+nameImage.value = randomName();
 function randomName() {
     return "image" + Math.floor(Math.random() * 9999 + 1);
 }
 
-var cont = 0;
 
 
 function drawFigureSelected(x, y, figureSelected) {
     context.strokeStyle = color;
-    context.fillStyle = checked ? "transparent" : color;
+    context.fillStyle = checked ? color : "transparent";
 
     switch (figureSelected) {
         case 'circle':
@@ -44,17 +50,16 @@ function drawFigureSelected(x, y, figureSelected) {
             context.arc(x, y, size, 0, 2 * Math.PI);
             context.fill();
             context.stroke();
-            write("Circle - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Circle");
             break;
 
         case 'square':
             context.beginPath();
             context.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
             context.strokeRect(x - size / 2, y - size / 2, size * 2, size * 2);
-            figuresList.push(figureSelected())
-            write("Square - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Square");
             break;
 
         case 'triangle':
@@ -64,9 +69,9 @@ function drawFigureSelected(x, y, figureSelected) {
             context.lineTo(x + Number(size), y + Number(size));
             context.closePath();
             context.fill();
+            addFigureToList(figureSelected, x, y, size);
             context.stroke();
-            write("Triangle - " + cont);
-            cont++;
+            write("Triangle");
             break;
 
         case 'star':
@@ -79,36 +84,67 @@ function drawFigureSelected(x, y, figureSelected) {
             context.closePath();
             context.fill();
             context.stroke();
-            write("Star - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Star");
             break;
     }
 }
 
+function addFigureToList(figureSelected, x, y, size) {
+    cont++;
+    content.push({
+        "id":cont,
+        "type":figureSelected,
+        "x":x,
+        "y":y,
+        "color":color,
+        "fill":fill,
+        "size":size,
+    });    
+    inputJSON.value = JSON.stringify(strings);
+}
+
 function write(text){
-    document.querySelector('#list').innerHTML+="<li> <button>Remove</button> " + text + "</li>";
-    }
+    list.innerHTML+="<li> <button>Remove</button> " + text + "</li>";
+    inputJSON.value = JSON.stringify(strings);
+}
 
 select.addEventListener("change", function() {
     figureSelected = select.value;
+    inputJSON.value = JSON.stringify(strings);
 });
 
 colorInput.addEventListener("input", function() {
     color = colorInput.value;
+    inputJSON.value = JSON.stringify(strings);
 });
 
 checkbox.addEventListener("change", function() {
-        checked = checkbox.checked;
+    checked = checkbox.checked;
+    inputJSON.value = JSON.stringify(strings);
 });
 
 rangeInput.addEventListener("input", function() {
     size = rangeInput.value;
+    inputJSON.value = JSON.stringify(strings);
 });
 
 canvas.addEventListener('click', function(event) {
     x = event.clientX - canvas.offsetLeft;
     y = event.clientY - canvas.offsetTop;
     drawFigureSelected(x, y, figureSelected);
+    inputJSON.value = JSON.stringify(strings);
+    console.log("x, y: " + x + ", " + y);
 });
 
-nameImage.value = randomName();
+buttonClean.addEventListener('click', function() {
+    cont = 0;
+    content = [];
+    list.innerHTML="";
+    strings = {
+    "content" : content
+};
+    context.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+

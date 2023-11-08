@@ -2,7 +2,9 @@ canvas {
     border: 2px solid black;
 }
 
-#principalContainer {
-    display: flex;
-    flex-direction: row;
-}
+#list {
+    position: absolute;
+    left: 27.50%; /* Ajusta este valor según sea necesario para la separación que desees */
+    top: 10%; /* Ajusta esta propiedad si deseas cambiar la posición vertical */
+  }
+  

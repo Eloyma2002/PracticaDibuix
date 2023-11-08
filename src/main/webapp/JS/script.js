@@ -6,6 +6,8 @@ const checkbox = document.querySelector("#fill");
 const rangeInput = document.querySelector("#size");
 const nameImage = document.querySelector('#name');
 const clean = document.querySelector('#clean');
+const JSON = document.querySelector('#JSON');
+const list = document.querySelector('#list');
 const figuresList = [];
 
 canvas.width = 400;
@@ -16,22 +18,17 @@ let color = colorInput.value;
 let checked = checkbox.checked;
 let size = rangeInput.value;
 let x, y;
+let cont = 0;
+let content = [];
+let strings = {
+    "content" : content
+};
 
-class Figure {
-    constructor(type, x, y, size, index) {
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.index = index;
-    }
-}
-
+nameImage.value = randomName();
 function randomName() {
     return "image" + Math.floor(Math.random() * 9999 + 1);
 }
 
-var cont = 0;
 
 
 function drawFigureSelected(x, y, figureSelected) {
@@ -44,8 +41,8 @@ function drawFigureSelected(x, y, figureSelected) {
             context.arc(x, y, size, 0, 2 * Math.PI);
             context.fill();
             context.stroke();
-            write("Circle - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Circle");
             break;
 
         case 'square':
@@ -53,8 +50,8 @@ function drawFigureSelected(x, y, figureSelected) {
             context.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
             context.strokeRect(x - size / 2, y - size / 2, size * 2, size * 2);
             figuresList.push(figureSelected())
-            write("Square - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Square");
             break;
 
         case 'triangle':
@@ -64,9 +61,9 @@ function drawFigureSelected(x, y, figureSelected) {
             context.lineTo(x + Number(size), y + Number(size));
             context.closePath();
             context.fill();
+            addFigureToList(figureSelected, x, y, size);
             context.stroke();
-            write("Triangle - " + cont);
-            cont++;
+            write("Triangle");
             break;
 
         case 'star':
@@ -79,14 +76,25 @@ function drawFigureSelected(x, y, figureSelected) {
             context.closePath();
             context.fill();
             context.stroke();
-            write("Star - " + cont);
-            cont++;
+            addFigureToList(figureSelected, x, y, size);
+            write("Star");
             break;
     }
 }
 
+function addFigureToList(figureSelected, x, y, size) {
+    cont++;
+    content.push({
+        "id":cont,
+        "type":figureSelected,
+        "x":x,
+        "y":y,
+        "size":size
+    });    
+}
+
 function write(text){
-    document.querySelector('#list').innerHTML+="<li> <button>Remove</button> " + text + "</li>";
+    list.innerHTML+="<li> <button>Remove</button> " + text + "</li>";
     }
 
 select.addEventListener("change", function() {
@@ -98,7 +106,7 @@ colorInput.addEventListener("input", function() {
 });
 
 checkbox.addEventListener("change", function() {
-        checked = checkbox.checked;
+    checked = checkbox.checked;
 });
 
 rangeInput.addEventListener("input", function() {
@@ -109,6 +117,17 @@ canvas.addEventListener('click', function(event) {
     x = event.clientX - canvas.offsetLeft;
     y = event.clientY - canvas.offsetTop;
     drawFigureSelected(x, y, figureSelected);
+    console.log(strings);
 });
 
-nameImage.value = randomName();
+buttonClean.addEventListener('click', function() {
+    cont = 0;
+    content = [];
+    list.innerHTML="";
+    strings = {
+    "content" : content
+};
+    context.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+

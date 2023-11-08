@@ -15,12 +15,12 @@
     </div>
     <p></p>
     <form action="index.html" method="post">
-        <button id="clean">Clean</button>
+        <input type="button" id="clean" value="Clean"></input>
         <button id="send">Send</button>
-        <button id="draw">Draw</button>
+        <input type="button" id="draw" value="Draw"></input>
     </form>
     <p></p>
-    <p>Name: <input type="text" id="name" value="."></p>
+    <p>Name: <input type="text" id="name" value="."></p> 
     <select name="figure" id="figure">
         <option value="triangle">Triangle</option>
         <option value="square">Square</option>
@@ -33,6 +33,8 @@
     <label for="fill">Fill: <input type="checkbox" name="fill" id="fill"></label>
     <p></p>
     <p>Size: <input type="range" name="size" id="size"></p>
+
+    <input type="hidden" id="JSON">
 
 <script src="/prueba2.js"></script>
 </body>
