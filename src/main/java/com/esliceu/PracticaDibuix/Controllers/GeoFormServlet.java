@@ -19,7 +19,11 @@ public class GeoFormServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String JSON = req.getParameter("JSON");
+        System.out.println(JSON);
+
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/geoform.jsp");
         disp.forward(req, resp);
     }
+
 }

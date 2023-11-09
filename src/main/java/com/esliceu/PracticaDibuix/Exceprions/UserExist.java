@@ -1,4 +1,4 @@
 package com.esliceu.PracticaDibuix.Exceprions;
 
-public class UserExist extends Throwable {
+public class UserExist extends RuntimeException {
 }

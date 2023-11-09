@@ -5,24 +5,31 @@ const colorInput = document.querySelector("#color");
 const checkbox = document.querySelector("#fill");
 const rangeInput = document.querySelector("#size");
 const nameImage = document.querySelector('#name');
-const clean = document.querySelector('#clean');
-const JSON = document.querySelector('#JSON');
+const buttonClean = document.querySelector('#clean');
+const inputJSON = document.querySelector('#JSON');
 const list = document.querySelector('#list');
-const figuresList = [];
+const buttonDraw = document.querySelector('#draw');
+
 
 canvas.width = 400;
 canvas.height = 400;
 
+let draw = false;
 let figureSelected = select.value;
 let color = colorInput.value;
 let checked = checkbox.checked;
 let size = rangeInput.value;
 let x, y;
 let cont = 0;
+let numFigures = 0;
 let content = [];
-let strings = {
-    "content" : content
-};
+
+
+buttonDraw.addEventListener("click", function () {
+    draw = !draw;
+});
+
+
 
 nameImage.value = randomName();
 function randomName() {
@@ -33,7 +40,7 @@ function randomName() {
 
 function drawFigureSelected(x, y, figureSelected) {
     context.strokeStyle = color;
-    context.fillStyle = checked ? "transparent" : color;
+    context.fillStyle = checked ? color : "transparent";
 
     switch (figureSelected) {
         case 'circle':
@@ -49,7 +56,6 @@ function drawFigureSelected(x, y, figureSelected) {
             context.beginPath();
             context.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
             context.strokeRect(x - size / 2, y - size / 2, size * 2, size * 2);
-            figuresList.push(figureSelected())
             addFigureToList(figureSelected, x, y, size);
             write("Square");
             break;
@@ -84,49 +90,55 @@ function drawFigureSelected(x, y, figureSelected) {
 
 function addFigureToList(figureSelected, x, y, size) {
     cont++;
-    content.push({
+    content.push(JSON.stringify({
         "id":cont,
         "type":figureSelected,
         "x":x,
         "y":y,
-        "size":size
-    });    
+        "color":color,
+        "fill":fill,
+        "size":size,
+    }));    
+    inputJSON.value = JSON.stringify("[" + content + "]");
 }
 
 function write(text){
     list.innerHTML+="<li> <button>Remove</button> " + text + "</li>";
-    }
+    inputJSON.value = JSON.stringify("[" + content + "]");
+}
 
 select.addEventListener("change", function() {
     figureSelected = select.value;
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 colorInput.addEventListener("input", function() {
     color = colorInput.value;
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 checkbox.addEventListener("change", function() {
     checked = checkbox.checked;
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 rangeInput.addEventListener("input", function() {
     size = rangeInput.value;
+    inputJSON.value = JSON.stringify(strings);
 });
 
 canvas.addEventListener('click', function(event) {
     x = event.clientX - canvas.offsetLeft;
     y = event.clientY - canvas.offsetTop;
     drawFigureSelected(x, y, figureSelected);
-    console.log(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
+    console.log("x, y: " + x + ", " + y);
 });
 
 buttonClean.addEventListener('click', function() {
     cont = 0;
     content = [];
     list.innerHTML="";
-    strings = {
-    "content" : content
-};
     context.clearRect(0, 0, canvas.width, canvas.height);
 });
 

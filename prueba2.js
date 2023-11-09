@@ -23,9 +23,7 @@ let x, y;
 let cont = 0;
 let numFigures = 0;
 let content = [];
-let strings = {
-    "content" : content
-};
+
 
 buttonDraw.addEventListener("click", function () {
     draw = !draw;
@@ -92,7 +90,7 @@ function drawFigureSelected(x, y, figureSelected) {
 
 function addFigureToList(figureSelected, x, y, size) {
     cont++;
-    content.push({
+    content.push(JSON.stringify({
         "id":cont,
         "type":figureSelected,
         "x":x,
@@ -100,28 +98,28 @@ function addFigureToList(figureSelected, x, y, size) {
         "color":color,
         "fill":fill,
         "size":size,
-    });    
-    inputJSON.value = JSON.stringify(strings);
+    }));    
+    inputJSON.value = JSON.stringify("[" + content + "]");
 }
 
 function write(text){
     list.innerHTML+="<li> <button>Remove</button> " + text + "</li>";
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
 }
 
 select.addEventListener("change", function() {
     figureSelected = select.value;
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 colorInput.addEventListener("input", function() {
     color = colorInput.value;
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 checkbox.addEventListener("change", function() {
     checked = checkbox.checked;
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 rangeInput.addEventListener("input", function() {
@@ -133,7 +131,7 @@ canvas.addEventListener('click', function(event) {
     x = event.clientX - canvas.offsetLeft;
     y = event.clientY - canvas.offsetTop;
     drawFigureSelected(x, y, figureSelected);
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
     console.log("x, y: " + x + ", " + y);
 });
 
@@ -141,9 +139,6 @@ buttonClean.addEventListener('click', function() {
     cont = 0;
     content = [];
     list.innerHTML="";
-    strings = {
-    "content" : content
-};
     context.clearRect(0, 0, canvas.width, canvas.height);
 });
 
