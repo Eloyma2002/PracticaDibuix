@@ -11,14 +11,19 @@ public class UserServices {
 
     public void register(User user) throws UserExist {
         user.setPassword(DigestUtils.md5Hex(user.getPassword()).toUpperCase());
-        UserDAOImpl userDAO = new UserDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
         userDAO.saveUser(user);
     }
 
     public User login(String userName, String password) throws UserDoesntExist {
-        UserDAOImpl userDAO = new UserDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
         User user = userDAO.getUser(userName, DigestUtils.md5Hex(password).toUpperCase());
         return user;
+    }
+
+    public void adminAdd(){
+        UserDAO userDAO = new UserDAOImpl();
+        userDAO.añadeAdmin();
     }
 
 }

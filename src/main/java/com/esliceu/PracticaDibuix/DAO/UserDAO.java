@@ -9,4 +9,6 @@ public interface UserDAO {
     void saveUser (User user) throws UserExist;
 
     User getUser (String userName, String password) throws UserDoesntExist;
+
+    void añadeAdmin();
 }

@@ -18,7 +18,7 @@ isELIgnored="false"
 <form action="/login" method="post">
 
     <p>
-        User name:
+        Username:
     </p>
     <input type="text" name="userName"/>
 

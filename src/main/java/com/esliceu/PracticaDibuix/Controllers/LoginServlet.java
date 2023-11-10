@@ -27,13 +27,13 @@ public class LoginServlet extends HttpServlet {
         String userName = req.getParameter("userName");
         String password = req.getParameter("password");
         UserServices userServices = new UserServices();
+        userServices.adminAdd();
         User user = userServices.login(userName, password);
 
         if (user != null) {
             HttpSession session = req.getSession();
             session.setAttribute("user",user);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/geoform");
-            dispatcher.forward(req, resp);
+            resp.sendRedirect("/geoform");
         } else {
             req.setAttribute("error", "User not found");
             RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");

@@ -96,10 +96,11 @@ function addFigureToList(figureSelected, x, y, size) {
         "x":x,
         "y":y,
         "color":color,
-        "fill":fill,
+        "fill":checkbox.checked,
         "size":size,
     }));    
     inputJSON.value = JSON.stringify("[" + content + "]");
+    console.log(content);
 }
 
 function write(text){

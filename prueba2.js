@@ -14,7 +14,6 @@ const buttonDraw = document.querySelector('#draw');
 canvas.width = 400;
 canvas.height = 400;
 
-let draw = false;
 let figureSelected = select.value;
 let color = colorInput.value;
 let checked = checkbox.checked;
@@ -23,13 +22,82 @@ let x, y;
 let cont = 0;
 let numFigures = 0;
 let content = [];
+let isDrawing = false;
+let drawPath = [];
 
 
-buttonDraw.addEventListener("click", function () {
-    draw = !draw;
+buttonDraw.addEventListener('click', function() {
+    isDrawing = !isDrawing;
+
+    if (isDrawing) {
+        changeButtonDrawColor("green");
+    } else {
+        changeButtonDrawColor("red");
+    }
+});
+/*
+function changeButtonDrawColor(text) {
+    buttonDraw.color = text;
+}*/
+
+
+canvas.addEventListener('mousedown', function(event) {
+    if (!isDrawing) return;
+    x = event.clientX - canvas.offsetLeft;
+    y = event.clientY - canvas.offsetTop;
+    isDrawing = true;
+
+    drawPath = [];
+    drawPath.push({ x, y });
 });
 
+canvas.addEventListener('mousemove', function(event) {
 
+    const currentX = event.clientX - canvas.offsetLeft;
+    const currentY = event.clientY - canvas.offsetTop;
+
+    drawPath.push({ x: currentX, y: currentY });
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < content.length; i++) {
+        const figure = JSON.parse(content[i]);
+        drawFigureSelected(figure.x, figure.y, figure.type);
+    }
+
+    context.beginPath();
+    context.moveTo(drawPath[0].x, drawPath[0].y);
+
+    for (let i = 1; i < drawPath.length; i++) {
+        context.lineTo(drawPath[i].x, drawPath[i].y);
+    }
+    
+    context.stroke();
+});
+
+canvas.addEventListener('mouseup', function() {
+    if (!isDrawing) return;
+
+    isDrawing = false;
+
+    addDrawPathToList(drawPath);
+    drawPath = []; 
+});
+
+function addDrawPathToList(drawPath) {
+    cont++;
+    content.push(JSON.stringify({
+        "id": cont,
+        "type": "draw",
+        "path": drawPath,
+        "color": color,
+        "fill": checkbox.checked,
+        "size": size,
+    }));
+
+    inputJSON.value = JSON.stringify(content);
+    console.log(content);
+}
 
 nameImage.value = randomName();
 function randomName() {
@@ -39,6 +107,7 @@ function randomName() {
 
 
 function drawFigureSelected(x, y, figureSelected) {
+    if(isDrawing) return;
     context.strokeStyle = color;
     context.fillStyle = checked ? color : "transparent";
 

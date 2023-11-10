@@ -3,6 +3,7 @@ package com.esliceu.PracticaDibuix.DAO;
 import com.esliceu.PracticaDibuix.Exceprions.UserDoesntExist;
 import com.esliceu.PracticaDibuix.Exceprions.UserExist;
 import com.esliceu.PracticaDibuix.Model.User;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +34,11 @@ public class UserDAOImpl implements UserDAO{
         }
         return null;
     }
+
+    @Override
+    public void añadeAdmin() {
+        User usere = new User("admin", "", DigestUtils.md5Hex("123").toUpperCase());
+        users.add(usere);
+    }
+
 }

@@ -14,12 +14,12 @@
     <canvas height="400" width="400" id="canvas1"></canvas>
     <p></p>
         <input type="button" id="clean" value="Clean"></input>
-        <button type="submit" id="send">Send</button>
+        <input type="submit" id="send" value="Send"></button>
         <input type="button" id="draw" value="Draw"></button>
     <ul id="list"></ul>
 
     <p></p>
-    <p>Name: <input type="text" id="name" value="."></p>
+    <p>Name: <input type="text" id="name" name="name" value="."></p>
     <select name="figure" id="figure">
         <option value="triangle">Triangle</option>
         <option value="square">Square</option>
