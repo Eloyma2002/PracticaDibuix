@@ -23,80 +23,56 @@ let cont = 0;
 let numFigures = 0;
 let content = [];
 let isDrawing = false;
-let drawPath = [];
-
+let isDrawingEnabled = false;
+let drawPath = []; 
 
 buttonDraw.addEventListener('click', function() {
-    isDrawing = !isDrawing;
-
-    if (isDrawing) {
-        changeButtonDrawColor("green");
-    } else {
-        changeButtonDrawColor("red");
-    }
+    isDrawingEnabled = true;
 });
-/*
-function changeButtonDrawColor(text) {
-    buttonDraw.color = text;
-}*/
-
-
 canvas.addEventListener('mousedown', function(event) {
-    if (!isDrawing) return;
-    x = event.clientX - canvas.offsetLeft;
-    y = event.clientY - canvas.offsetTop;
-    isDrawing = true;
-
-    drawPath = [];
-    drawPath.push({ x, y });
+    if (isDrawingEnabled) {
+        isDrawing = true;
+        const xStart = event.clientX - canvas.offsetLeft;
+        const yStart = event.clientY - canvas.offsetTop;
+        context.beginPath();
+        context.moveTo(xStart, yStart);
+        context.lineWidth = size; // Establece el tamaño de la línea
+        context.strokeStyle = color; // Establece el color de la línea
+        drawPath = [{ x: xStart, y: yStart, color, size }];
+    }
 });
 
 canvas.addEventListener('mousemove', function(event) {
-
-    const currentX = event.clientX - canvas.offsetLeft;
-    const currentY = event.clientY - canvas.offsetTop;
-
-    drawPath.push({ x: currentX, y: currentY });
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < content.length; i++) {
-        const figure = JSON.parse(content[i]);
-        drawFigureSelected(figure.x, figure.y, figure.type);
+    if (isDrawing && isDrawingEnabled) {
+        const currentX = event.clientX - canvas.offsetLeft;
+        const currentY = event.clientY - canvas.offsetTop;
+        context.lineTo(currentX, currentY);
+        context.stroke();
+        drawPath.push({ x: currentX, y: currentY, color, size });
     }
-
-    context.beginPath();
-    context.moveTo(drawPath[0].x, drawPath[0].y);
-
-    for (let i = 1; i < drawPath.length; i++) {
-        context.lineTo(drawPath[i].x, drawPath[i].y);
-    }
-    
-    context.stroke();
 });
 
 canvas.addEventListener('mouseup', function() {
-    if (!isDrawing) return;
-
-    isDrawing = false;
-
-    addDrawPathToList(drawPath);
-    drawPath = []; 
+    if (isDrawing && isDrawingEnabled) {
+        isDrawing = false;
+        isDrawingEnabled = false;
+        drawPath.push(drawPath);
+        drawPath = [];
+    }
 });
 
-function addDrawPathToList(drawPath) {
+function addFigureToList(figureSelected, x, y, size) {
     cont++;
-    content.push(JSON.stringify({
+    content.push({
         "id": cont,
-        "type": "draw",
-        "path": drawPath,
+        "type": figureSelected,
+        "x": x,
+        "y": y,
         "color": color,
-        "fill": checkbox.checked,
+        "fill": checked,
         "size": size,
-    }));
-
+    });
     inputJSON.value = JSON.stringify(content);
-    console.log(content);
 }
 
 nameImage.value = randomName();
@@ -107,7 +83,7 @@ function randomName() {
 
 
 function drawFigureSelected(x, y, figureSelected) {
-    if(isDrawing) return;
+    if(!isDrawingEnabled & !isDrawing) {
     context.strokeStyle = color;
     context.fillStyle = checked ? color : "transparent";
 
@@ -156,6 +132,7 @@ function drawFigureSelected(x, y, figureSelected) {
             break;
     }
 }
+}
 
 function addFigureToList(figureSelected, x, y, size) {
     cont++;
@@ -193,7 +170,7 @@ checkbox.addEventListener("change", function() {
 
 rangeInput.addEventListener("input", function() {
     size = rangeInput.value;
-    inputJSON.value = JSON.stringify(strings);
+    inputJSON.value = JSON.stringify("[" + content + "]");
 });
 
 canvas.addEventListener('click', function(event) {

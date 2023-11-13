@@ -16,4 +16,10 @@ public class DrawingDAOImpl implements DrawingDAO {
         drawings.add(dr);
         id++;
     }
+
+    @Override
+    public List<Drawing>
+    loadAllLists() {
+        return drawings;
+    }
 }
