@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geoform</title>
+    <link rel="stylesheet" href="/css/styles.css">
+
 </head>
 
 <body>
     <h1>Geoform</h1>
     <a href="/allLists">List all drawings | </a>
-    <a href="http://">List my drawings | </a>
+    <a href="/myList">List my drawings | </a>
     <a href="/geoform">Draw</a>
     <p></p>
 
 
-    <canvas height="400" width="400" id="canvas1" style="border: 2px solid black;"></canvas>
+    <canvas height="400" width="400" id="canvas"></canvas>
     <p></p>
     <form action="/geoform" method="post">
         <input type="button" id="clean" value="Clean"></input>
@@ -24,7 +26,7 @@
     <ul id="list"></ul>
 
     <p></p>
-    <p>Name: <input type="text" id="name" value="."></p>
+    <p>Name: <input type="text" id="name" value="." name="name"></p>
     <select name="figure" id="figure">
         <option value="triangle">Triangle</option>
         <option value="square">Square</option>
@@ -38,7 +40,7 @@
     <p></p>
     <p>Size: <input type="range" name="size" id="size"></p>
 
-    <input type="hidden" id="JSON" name="JSON" value="" readonly>
+    <input type="hidden" id="JSON" name="JSON" value readonly>
     </form>
 
     <script src="/JS/script.js"></script>

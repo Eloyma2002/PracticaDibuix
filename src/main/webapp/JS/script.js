@@ -1,4 +1,4 @@
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector('#canvas');
 const context = canvas.getContext('2d');
 const select = document.querySelector('#figure');
 const colorInput = document.querySelector("#color");
@@ -33,8 +33,8 @@ buttonDraw.addEventListener('click', function() {
 canvas.addEventListener('mousedown', function(event) {
     if (isDrawingEnabled) {
         isDrawing = true;
-        const xStart = event.clientX - canvas.offsetLeft;
-        const yStart = event.clientY - canvas.offsetTop;
+        var xStart = (event.clientX - canvas.offsetLeft) + window.scrollX;
+        var yStart = (event.clientY - canvas.offsetTop) + window.scrollY;
         context.beginPath();
         context.moveTo(xStart, yStart);
         context.lineWidth = size; 
@@ -45,8 +45,8 @@ canvas.addEventListener('mousedown', function(event) {
 
 canvas.addEventListener('mousemove', function(event) {
     if (isDrawing && isDrawingEnabled) {
-        const currentX = event.clientX - canvas.offsetLeft;
-        const currentY = event.clientY - canvas.offsetTop;
+        var currentX = (event.clientX - canvas.offsetLeft) + window.scrollX;
+        var currentY = (event.clientY - canvas.offsetTop) + window.scrollY;
         context.lineTo(currentX, currentY);
         context.stroke();
         drawPath.push({ x: currentX, y: currentY, color, size });
@@ -155,7 +155,6 @@ function write(text) {
     list.innerHTML += "<li id='li_" + cont + "'> <button onclick='removeElement(" + cont + ")'>Remove</button> " + text + "</li>";
 }
 
-
 select.addEventListener("change", function() {
     figureSelected = select.value;
 });
@@ -177,8 +176,8 @@ rangeInput.addEventListener("input", function() {
 });
 
 canvas.addEventListener('click', function(event) {
-    x = event.clientX - canvas.offsetLeft;
-    y = event.clientY - canvas.offsetTop;
+    x = (event.clientX - canvas.offsetLeft) + window.scrollX;
+    y = (event.clientY - canvas.offsetTop) + window.scrollY;
     drawFigureSelected(x, y, figureSelected);
     console.log("x, y: " + x + ", " + y);
 });
@@ -207,8 +206,8 @@ function reDoCanvasDrawing(x, y, figureSelected, color, size, checked) {
 
         case 'square':
             context.beginPath();
-            context.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
-            context.strokeRect(x - size / 2, y - size / 2, size * 2, size * 2);
+            context.fillRect(x - (size / 2), y - (size / 2),( size * 2), (size * 2));
+            context.strokeRect(x - (size / 2), y - (size / 2), (size * 2), (size * 2));
             addFigureToList(figureSelected, x, y, size);
             write("Square");
             console.log(content);
@@ -266,12 +265,5 @@ function removeElement(id) {
             }
         }
     }
-}
-
-function refreshCanvas() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    content.forEach(item => {
-        reDoCanvasDrawing(item.x, item.y, item.type, item.color, item.size, item.fill);
-    });
 }
 

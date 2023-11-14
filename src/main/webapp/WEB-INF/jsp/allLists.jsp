@@ -8,12 +8,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Lists</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
     <h1>List all drawings </h1>
-    <a href="/allList">List all drawings | </a>
-    <a href="http://">List my drawings | </a>
+    <a href="/allLists">List all drawings | </a>
+    <a href="/myList">List my drawings | </a>
     <a href="/geoform">Draw</a>
     <p></p>
 
@@ -28,13 +29,26 @@
 
         <c:forEach var="drawing" items="${drawings}">
 
-<tr>
+        <tr>
             <td>${drawing.getDate()}</td>
             <td>${drawing.getName()}</td>
             <td>${drawing.getUser().getUserName()}</td>
             <td>${drawing.getNumFigures()}</td>
-            <td><button>View</button><button>Modify</button><button>Delete</button></td>
-</tr>
+            <td>
+                <form action="/viewDrawing" method="post">
+                    <input type="hidden" name="drawingId" value="${drawing.getId()}">
+                    <input type="submit" name="action" value="View"></button>
+                </form>
+                <form action="/modifyDrawing" method="post">
+                    <input type="hidden" name="drawingId" value="${drawing.getId()}">
+                    <input type="submit" name="action" value="Modify"></button>
+                </form>
+                <form action="/allLists" method="post">
+                    <input type="hidden" name="drawingId" value="${drawing.getId()}">
+                    <input type="submit" name="action" value="Delete"></button>
+                </form>
+                </td>
+            </tr>
         </c:forEach>
-
     </table>
+</html>

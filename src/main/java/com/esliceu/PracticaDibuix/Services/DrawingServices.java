@@ -3,6 +3,7 @@ package com.esliceu.PracticaDibuix.Services;
 import com.esliceu.PracticaDibuix.DAO.DrawingDAO;
 import com.esliceu.PracticaDibuix.DAO.DrawingDAOImpl;
 import com.esliceu.PracticaDibuix.Model.Drawing;
+import com.esliceu.PracticaDibuix.Model.User;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 
@@ -19,7 +20,6 @@ public class DrawingServices {
             JSONArray jsonArray = (JSONArray) parser.parse(numOfFigures);
             dr.setNumFigures(jsonArray.size());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             dr.setNumFigures(0);
         }
         drawingDAO.save(dr);
@@ -29,5 +29,16 @@ public class DrawingServices {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
 
         return drawingDAO.loadAllLists();
+    }
+
+    public List<Drawing> loadMyList(User user) {
+        DrawingDAO drawingDAO = new DrawingDAOImpl();
+
+        return drawingDAO.loadMyList(user);
+    }
+
+    public void delete(int id, User user) {
+        DrawingDAO drawingDAO = new DrawingDAOImpl();
+        drawingDAO.deleteDrawing(id, user);
     }
 }

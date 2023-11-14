@@ -1,7 +1,10 @@
 package com.esliceu.PracticaDibuix.Controllers;
+
+import com.esliceu.PracticaDibuix.Filters.SessionFilter;
 import com.esliceu.PracticaDibuix.Model.Drawing;
 import com.esliceu.PracticaDibuix.Model.User;
 import com.esliceu.PracticaDibuix.Services.DrawingServices;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,16 +24,17 @@ public class AllListServlet extends HttpServlet {
         List<Drawing> drawings = drawingServices.loadAll();
         req.setAttribute("drawings", drawings);
 
-
         RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/allLists.jsp");
         disp.forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/jsp/allLists.jsp");
-        disp.forward(req, resp);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        int id = Integer.parseInt(req.getParameter("drawingId"));
+        User user = (User) session.getAttribute("user");
+        DrawingServices drawingServices = new DrawingServices();
+        drawingServices.delete(id, user);
+        resp.sendRedirect(req.getContextPath() + "/allLists");
     }
-
 }
