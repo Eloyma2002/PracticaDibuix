@@ -1,8 +1,11 @@
 package com.esliceu.PracticaDibuix.DAO;
 
-import com.esliceu.PracticaDibuix.Exceprions.UserDoesntExist;
-import com.esliceu.PracticaDibuix.Exceprions.UserExist;
+import com.esliceu.PracticaDibuix.Exceptions.UserDoesntExist;
+import com.esliceu.PracticaDibuix.Exceptions.UserExist;
 import com.esliceu.PracticaDibuix.Model.User;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface UserDAO {
 
@@ -10,5 +13,5 @@ public interface UserDAO {
 
     User getUser (String userName, String password) throws UserDoesntExist;
 
-    void añadeAdmin();
+    void sessionCookie(HttpServletRequest req, HttpServletResponse resp);
 }

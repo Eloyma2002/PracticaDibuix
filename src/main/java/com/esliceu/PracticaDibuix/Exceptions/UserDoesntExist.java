@@ -1,4 +1,4 @@
-package com.esliceu.PracticaDibuix.Exceprions;
+package com.esliceu.PracticaDibuix.Exceptions;
 
 public class UserDoesntExist extends RuntimeException {
 }

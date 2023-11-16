@@ -1,6 +1,8 @@
-// Selecciona elementos del DOM
+// Selecciona el canvas y su contexto
 const canvas = document.querySelector('#canvas');
 const context = canvas.getContext('2d');
+
+// Elementos del formulario
 const select = document.querySelector('#figure');
 const colorInput = document.querySelector("#color");
 const checkbox = document.querySelector("#fill");
@@ -12,47 +14,58 @@ const inputJSON = document.querySelector('#JSON');
 const list = document.querySelector('#list');
 const buttonDraw = document.querySelector('#draw');
 
-// Configuración del canvas
-canvas.width = 400;
-canvas.height = 400;
+// Obtiene la cadena JSON del elemento con id 'JSON' y la parsea
+const jsonString = document.querySelector('#JSON').value;
+const jsonObject = JSON.parse(jsonString);
 
-// Variables para manejar el estado del dibujo
+// Variables 
 let figureSelected = select.value;
 let color = colorInput.value;
 let checked = checkbox.checked;
 let size = rangeInput.value;
 let x, y;
 let cont = 0;
-let isMouseDrawing = false;
 let content = [];
 let lineContent = [];
+let isMouseDrawing = false;
 let isDrawingEnabled = false;
 
-// Establece el color del botón de dibujo según el estado
+// Configura el tamaño del canvas
+canvas.width = 400;
+canvas.height = 400;
+
+// Establece el color del botón 'Draw'
 buttonDraw.style.backgroundColor = isDrawingEnabled ? 'green' : 'red';
 
-// Event listeners para los elementos del DOM
+// Carga las figuras del objeto JSON
+loadFigures(jsonObject);
+
+// Evento: cambio en la selección de figura
 select.addEventListener("change", function () {
     figureSelected = select.value;
 });
 
+// Evento: clic en el botón 'Send'
 buttonSend.addEventListener("click", function () {
     inputJSON.value = JSON.stringify(content);
 });
 
+// Evento: cambio en el color
 colorInput.addEventListener("input", function () {
     color = colorInput.value;
 });
 
+// Evento: cambio en la opción de rellenar
 checkbox.addEventListener("change", function () {
     checked = checkbox.checked;
 });
 
+// Evento: cambio en el tamaño
 rangeInput.addEventListener("input", function () {
     size = rangeInput.value;
 });
 
-// Dibuja la figura seleccionada al hacer clic en el canvas
+// Evento: clic en el canvas
 canvas.addEventListener('click', function (event) {
     x = event.offsetX;
     y = event.offsetY;
@@ -60,7 +73,7 @@ canvas.addEventListener('click', function (event) {
     drawFigureSelected(x, y, figureSelected, size, checked, color, false);
 });
 
-// Limpia el canvas y la lista de figuras
+// Evento: clic en el botón 'Clean'
 buttonClean.addEventListener('click', function () {
     cont = 0;
     content = [];
@@ -68,24 +81,32 @@ buttonClean.addEventListener('click', function () {
     context.clearRect(0, 0, canvas.width, canvas.height);
 });
 
-// Activa/desactiva el modo de dibujo
+// Evento: clic en el botón 'Draw'
 buttonDraw.addEventListener('click', function () {
     isDrawingEnabled = !isDrawingEnabled;
     buttonDraw.style.backgroundColor = isDrawingEnabled ? 'green' : 'red';
 });
 
-// Event listeners para el dibujo con el mouse
+// Evento: mousedown en el canvas (dibujo de líneas)
 canvas.addEventListener("mousedown", (event) => {
     if (!isDrawingEnabled) return;
+
     isMouseDrawing = true;
     lineContent = [];
+
     const x = event.clientX - canvas.getBoundingClientRect().left;
     const y = event.clientY - canvas.getBoundingClientRect().top;
+
     lineContent.push([x, y]);
+
     context.beginPath();
     context.moveTo(x, y);
     context.lineWidth = size / 10;
+
+    // Evento: mousemove durante el dibujo de líneas
     canvas.addEventListener("mousemove", (event) => drawMouse(event));
+
+    // Evento: mouseup después del dibujo de líneas
     canvas.addEventListener("mouseup", () => {
         if (isMouseDrawing && lineContent.length > 1) {
             content.push({
@@ -95,11 +116,14 @@ canvas.addEventListener("mousedown", (event) => {
                 "color": color,
                 "coordinates": lineContent
             });
-            write("Linea");
+            write("Line");
             cont++;
         }
+
         isMouseDrawing = false;
     });
+
+    // Evento: mouseout durante el dibujo de líneas
     canvas.addEventListener("mouseout", () => {
         if (isMouseDrawing) {
             canvas.removeEventListener("mousemove", (event) => drawMouse(event));
@@ -108,6 +132,7 @@ canvas.addEventListener("mousedown", (event) => {
     });
 });
 
+// Evento: mouseup después del dibujo de líneas (para el caso de soltar fuera del canvas)
 canvas.addEventListener("mouseup", () => {
     if (isMouseDrawing && lineContent.length > 1) {
         content.push({
@@ -123,26 +148,21 @@ canvas.addEventListener("mouseup", () => {
     isMouseDrawing = false;
 });
 
-// Genera un nombre de imagen aleatorio
-nameImage.value = randomName();
-
-// Función para generar un nombre aleatorio
-function randomName() {
-    return "image" + Math.floor(Math.random() * 9999 + 1);
-}
-
-// Función para dibujar con el mouse
+// Función: dibujar con el mouse (líneas)
 function drawMouse(event) {
     if (!isMouseDrawing) return;
+
     const x = event.clientX - canvas.getBoundingClientRect().left;
     const y = event.clientY - canvas.getBoundingClientRect().top;
+
     lineContent.push([x, y]);
+
     context.strokeStyle = color;
     context.lineTo(x, y);
     context.stroke();
 }
 
-// Función para agregar una figura a la lista
+// Función: agregar figura a la lista
 function addFigureToList(figureSelected, x, y, size, color, checked) {
     content.push({
         "id": cont,
@@ -155,30 +175,34 @@ function addFigureToList(figureSelected, x, y, size, color, checked) {
     });
 }
 
-// Función para escribir en la lista
+// Función: escribir en la lista
 function write(text) {
     list.innerHTML += "<li id='li_" + cont + "'> <button onclick='removeElement(" + cont + ")'>Remove</button> " + text + "</li>";
 }
 
-// Función para dibujar una línea
+// Función: dibujar línea
 function drawLine(lineObject) {
     context.strokeStyle = lineObject.color;
     context.lineWidth = lineObject.size;
+
     context.beginPath();
     context.moveTo(lineObject.coordinates[0][0], lineObject.coordinates[0][1]);
+
     for (let i = 1; i < lineObject.coordinates.length; i++) {
         context.lineTo(lineObject.coordinates[i][0], lineObject.coordinates[i][1]);
     }
     context.stroke();
 }
 
-// Función para remover un elemento de la lista
+// Función: eliminar elemento de la lista
 function removeElement(id) {
     const elementToRemove = document.getElementById("li_" + id);
     let contentTemp = [];
+
     if (elementToRemove) {
         elementToRemove.remove();
     }
+
     for (let i = 0; i < content.length; i++) {
         if (content[i].id != id && content[i].type != "line") {
             contentTemp.push({
@@ -200,8 +224,10 @@ function removeElement(id) {
             });
         }
     }
+
     content = contentTemp;
     context.clearRect(0, 0, canvas.width, canvas.height);
+
     content.forEach(figure => {
         if (figure.type != "line") {
             drawFigureSelected(figure.x, figure.y, figure.type, figure.size, figure.fill, figure.color, true);
@@ -211,14 +237,16 @@ function removeElement(id) {
     });
 }
 
-// Función para dibujar la figura seleccionada
+// Función: dibujar figura seleccionada
 function drawFigureSelected(x, y, figureSelected, size, checked, color, removeList) {
     if (isDrawingEnabled && !removeList) {
         return;
     }
+
     context.strokeStyle = color;
     context.fillStyle = checked ? color : "transparent";
     context.lineWidth = 1;
+
     switch (figureSelected) {
         case 'circle':
             context.beginPath();
@@ -231,6 +259,7 @@ function drawFigureSelected(x, y, figureSelected, size, checked, color, removeLi
                 cont++;
             }
             break;
+
         case 'square':
             context.beginPath();
             context.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
@@ -241,6 +270,7 @@ function drawFigureSelected(x, y, figureSelected, size, checked, color, removeLi
                 cont++;
             }
             break;
+
         case 'triangle':
             context.beginPath();
             context.moveTo(x, y - Number(size));
@@ -255,6 +285,7 @@ function drawFigureSelected(x, y, figureSelected, size, checked, color, removeLi
                 cont++;
             }
             break;
+
         case 'star':
             context.beginPath();
             for (let i = 0; i < 14; i++) {
@@ -272,4 +303,17 @@ function drawFigureSelected(x, y, figureSelected, size, checked, color, removeLi
             }
             break;
     }
+}
+
+// Función: cargar figuras desde un objeto JSON
+function loadFigures(jsonObject) {
+    jsonObject.forEach(figure => {
+        if (figure.type != "line") {
+            drawFigureSelected(figure.x, figure.y, figure.type, figure.size, figure.fill, figure.color, false);
+        } else {
+            drawLine(figure);
+            write("Line");
+            cont++;
+        }
+    });
 }

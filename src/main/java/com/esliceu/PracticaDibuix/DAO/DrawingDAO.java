@@ -15,4 +15,9 @@ public interface DrawingDAO {
 
     void deleteDrawing(int id, User user);
 
+    Drawing getDrawing(int id);
+
+    void modifyFigures(int id, String figures, String newName, int size);
+
+
 }
