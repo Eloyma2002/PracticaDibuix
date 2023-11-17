@@ -9,30 +9,31 @@ import java.util.Objects;
 
 public class DrawingDAOImpl implements DrawingDAO {
 
-    // Lista que almacena los dibujos a modo de base de datos (cada uno enlazado con su usuario correspondiente)
+    // Llista que emmagatzema els dibuixos com a base de dades (cada un enllaçat amb el seu usuari corresponent)
     static List<Drawing> drawings = new ArrayList<>();
 
-    // Variable para asignar IDs únicas a los dibujos
+    // Variable per assignar IDs úniques als dibuixos
     static int id = 0;
 
     @Override
-    public void save(Drawing drawing) {
-        // Asignar una ID única al dibujo y agregarlo a la lista
+    public boolean save(Drawing drawing) {
+        // Assignar una ID única al dibuix i afegir-lo a la llista
         drawing.setId(id);
         drawings.add(drawing);
-        // Incrementar la ID para el próximo dibujo
+        // Incrementar la ID per al pròxim dibuix
         id++;
+        return true;
     }
 
     @Override
     public List<Drawing> loadAllLists() {
-        // Devolver la lista completa de dibujos
+        // Tornar la llista completa de dibuixos
         return drawings;
     }
 
     @Override
     public List<Drawing> loadMyList(User user) {
-        // Filtrar y devolver la lista de dibujos pertenecientes a un usuario específico
+        // Filtrar i tornar la llista de dibuixos pertanyents a un usuari específic
         List<Drawing> myList = new ArrayList<>();
         for (Drawing drawing : drawings) {
             if (drawing.getUser().equals(user)) {
@@ -43,14 +44,14 @@ public class DrawingDAOImpl implements DrawingDAO {
     }
 
     @Override
-    public void deleteDrawing(int id, User user) {
-        // Eliminar un dibujo si coincide con el ID y el usuario proporcionados
-        drawings.removeIf(drawing -> Objects.equals(drawing.getUser().getUsername(), user.getUsername()) && drawing.getId() == id);
+    public boolean deleteDrawing(int id, User user) {
+        // Eliminar un dibuix si coincideix amb la ID i l'usuari proporcionats
+        return drawings.removeIf(drawing -> Objects.equals(drawing.getUser().getUsername(), user.getUsername()) && drawing.getId() == id);
     }
 
     @Override
     public Drawing getDrawing(int id) {
-        // Buscar y devolver un dibujo por su ID
+        // Buscar i tornar un dibuix per la seva ID
         for (Drawing drawing : drawings) {
             if (drawing.getId() == id) {
                 return drawing;
@@ -60,14 +61,16 @@ public class DrawingDAOImpl implements DrawingDAO {
     }
 
     @Override
-    public void modifyFigures(int id, String figures, String newName, int size) {
-        // Modificar las figuras, nombre y tamaño de un dibujo por su ID
+    public boolean modifyFigures(int id, String figures, String newName, int size, User user) {
+        // Modificar les figures, nom i mida d'un dibuix per la seva ID
         for (Drawing drawing : drawings) {
-            if (drawing.getId() == id) {
+            if (drawing.getId() == id && Objects.equals(drawing.getUser().getUsername(), user.getUsername())) {
                 drawing.setFigures(figures);
                 drawing.setName(newName);
                 drawing.setNumFigures(size);
+                return true;
             }
         }
+        return false;
     }
 }

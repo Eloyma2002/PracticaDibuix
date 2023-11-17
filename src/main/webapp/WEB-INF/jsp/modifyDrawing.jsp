@@ -15,11 +15,11 @@
 
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <h2>Modify Drawing</h2>
                 <div class="container-fluid">
-                    <h2>Modify drawing</h2>
                     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                        data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                        aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
 
@@ -41,35 +41,46 @@
             </nav>
 
 
-            <canvas height="400" width="400" id="canvas"></canvas>
-            <p></p>
-            <form action="/modifyDrawing" method="post">
-                <input type="button" id="clean" value="Clean"></input>
-                <button type="submit" id="send">Send</button>
-                <input type="button" id="draw" value="Draw"></button>
-                <c:if test="${!empty error}">
-                    ${error}
-                </c:if>
-                <ul id="list"></ul>
+            <div class="container-fluid principal">
+                <div class="row">
+                    <div class="col principal">
+                        <ul id="list"></ul>
+                    </div>
+                    <div class="col">
+                        <canvas height="400" width="400" id="canvas" style="border: 2px solid black;"></canvas>
+                        <p></p>
+                        <p class="error">
+                            ${error}
+                        </p>
+                    </div>
+                    <div class="col principal">
+                        <form action="/modifyDrawing" method="post">
+                            <input type="button" id="clean" value="Clean"></input>
+                            <button type="submit" id="send">Send</button>
+                            <input type="button" id="draw" value="Draw"></button>
+                            <ul id="list"></ul>
 
-                <p></p>
-                <p>Name: <input type="text" id="name" value="${name}" name="name"></p>
-                <select name="figure" id="figure">
-                    <option value="triangle">Triangle</option>
-                    <option value="square">Square</option>
-                    <option value="circle">Circle</option>
-                    <option value="star">Star</option>
-                </select>
-                <p></p>
-                <p></p>
-                <p>Color: <input type="color" name="color" id="color"></p>
-                <label for="fill">Fill: <input type="checkbox" name="fill" id="fill"></label>
-                <p></p>
-                <p>Size: <input type="range" name="size" id="size"></p>
+                            <p></p>
+                            <p>Name: <input type="text" id="name" value=${name} name="name"></p>
+                            <select name="figure" id="figure">
+                                <option value="triangle">Triangle</option>
+                                <option value="square">Square</option>
+                                <option value="circle">Circle</option>
+                                <option value="star">Star</option>
+                            </select>
+                            <p></p>
+                            <p></p>
+                            <p>Color: <input type="color" name="color" id="color"></p>
+                            <label for="fill">Fill: <input type="checkbox" name="fill" id="fill"></label>
+                            <p></p>
+                            <p>Size: <input type="range" name="size" id="size"></p>
 
-                <input type="hidden" name="drawingId" value="${drawingId}" readonly>
-                <input type="hidden" id="JSON" name="JSON" value=${JSON} readonly>
-            </form>
+                            <input type="hidden" name="drawingId" value=${drawingId} />
+                            <input type="hidden" id="JSON" name="JSON" value=${JSON} readonly>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <script src="/JS/script_modify.js"></script>
         </body>

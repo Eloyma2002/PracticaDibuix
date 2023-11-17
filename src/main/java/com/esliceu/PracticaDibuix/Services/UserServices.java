@@ -13,24 +13,21 @@ import javax.servlet.http.HttpServletResponse;
 public class UserServices {
 
     public void register(User user) throws UserExist {
-        // Hash de la contraseña antes de almacenarla en la lista de usuarios
+        // Hash de la contrasenya abans d'emmagatzemar-la a la llista d'usuaris
         user.setPassword(DigestUtils.md5Hex(user.getPassword()).toUpperCase());
 
-        // Obtener el DAO de usuario e insertar el nuevo usuario
+        // Obtenir el DAO d'usuari i inserir el nou usuari
         UserDAO userDAO = new UserDAOImpl();
         userDAO.saveUser(user);
     }
 
     public User login(String userName, String password) throws UserDoesntExist {
-        // Obtener el DAO de usuario y autenticar al usuario
+        // Obtenir el DAO d'usuari i autenticar l'usuari
         UserDAO userDAO = new UserDAOImpl();
+        if (password.length() < 5) {
+            return null;
+        }
         User user = userDAO.getUser(userName, DigestUtils.md5Hex(password).toUpperCase());
         return user;
-    }
-
-    public void securitySession(HttpServletRequest req, HttpServletResponse resp) {
-        // Obtener el DAO de usuario y configurar la cookie de sesión
-        UserDAO userDAO = new UserDAOImpl();
-        userDAO.sessionCookie(req, resp);
     }
 }

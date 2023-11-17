@@ -15,32 +15,24 @@ public class ViewServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Servicios de usuario para verificar la sesión del usuario
-        UserServices userServices = new UserServices();
-        userServices.securitySession(req, resp);
-
-        // Redirigir a la página JSP para visualizar el dibujo
+        // Redirigir a la pàgina JSP per visualitzar el dibuix
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/viewDrawing.jsp");
         dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Servicios de usuario para verificar la sesión del usuario
-        UserServices userServices = new UserServices();
-        userServices.securitySession(req, resp);
-
-        // Obtener el ID del dibujo a visualizar desde el formulario
+        // Obtindre l'ID del dibuix a visualitzar des del formulari
         int id = Integer.parseInt(req.getParameter("drawingId"));
 
-        // Obtener el dibujo desde el servicio de dibujos
+        // Obtindre el dibuix des del servei de dibuixos
         DrawingServices drawingServices = new DrawingServices();
         Drawing drawing = drawingServices.getDrawing(id);
 
-        // Configurar el atributo en la solicitud con el JSON del dibujo
+        // Configurar l'atribut en la sol·licitud amb el JSON del dibuix
         req.setAttribute("JSON", drawing.getFigures());
 
-        // Redirigir a la página JSP para visualizar el dibujo
+        // Redirigir a la pàgina JSP per visualitzar el dibuix
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/viewDrawing.jsp");
         dispatcher.forward(req, resp);
     }

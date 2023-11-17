@@ -8,65 +8,73 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DrawingServices {
 
-    // Método para guardar un dibujo
-    public void save(Drawing drawing) {
+    // Mètode per desar un dibuix
+    public boolean save(Drawing drawing) {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
 
-        // Obtener el JSON de figuras del dibujo
+        // Obtindre el JSON de figures del dibuix
         String figuresJson = drawing.getFigures();
         JSONParser parser = new JSONParser();
 
         try {
-            // Intentar parsear el JSON y obtener el número de figuras
+            // Intentar parsejar el JSON i obtenir el nombre de figures
             JSONArray jsonArray = (JSONArray) parser.parse(figuresJson);
             drawing.setNumFigures(jsonArray.size());
+            if (drawing.getNumFigures() == 0) {
+                return false;
+            }
         } catch (Exception e) {
-            // En caso de error, establecer el número de figuras en 0
-            drawing.setNumFigures(0);
+            return false;
         }
 
-        // Guardar el dibujo en la base de datos
+        // Desar el dibuix a la base de dades
         drawingDAO.save(drawing);
+        return true;
     }
 
-    // Método para cargar todos los dibujos
+    // Mètode per carregar tots els dibuixos
     public List<Drawing> loadAll() {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
         return drawingDAO.loadAllLists();
     }
 
-    // Método para cargar la lista de dibujos de un usuario específico
+    // Mètode per carregar la llista de dibuixos d'un usuari específic
     public List<Drawing> loadMyList(User user) {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
         return drawingDAO.loadMyList(user);
     }
 
-    // Método para eliminar un dibujo
-    public void delete(int id, User user) {
+    // Mètode per eliminar un dibuix
+    public boolean delete(int id, User user) {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
-        drawingDAO.deleteDrawing(id, user);
+        return drawingDAO.deleteDrawing(id, user);
     }
 
-    // Método para obtener un dibujo por su ID
+    // Mètode per obtenir un dibuix pel seu ID
     public Drawing getDrawing(int id) {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
         return drawingDAO.getDrawing(id);
     }
 
-    // Método para modificar un dibujo ya creado anteriormente
-    public void modify(int id, String figures, String newName) {
+    // Mètode per modificar un dibuix ja creat anteriorment
+    public boolean modify(int id, String figures, String newName, User user, Drawing drawing) {
         DrawingDAO drawingDAO = new DrawingDAOImpl();
         JSONParser parser = new JSONParser();
 
         try {
-            // Intentar parsear el JSON y obtener el número de figuras
+            // Intentar parsejar el JSON i obtenir el nombre de figures
             JSONArray jsonArray = (JSONArray) parser.parse(figures);
-            drawingDAO.modifyFigures(id, figures, newName, jsonArray.size());
+            if (Objects.equals(user.getUsername(), drawing.getUser().getUsername())) {
+                drawingDAO.modifyFigures(id, figures, newName, jsonArray.size(), user);
+                return true;
+            }
         } catch (Exception e) {
-            return;
+            return false;
         }
+        return false;
     }
 }

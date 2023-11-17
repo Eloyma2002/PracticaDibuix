@@ -16,58 +16,58 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// Mapeo del servlet para la página de registro
+// Mapeig del servlet per a la pàgina de registre
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
-    // Manejar las solicitudes GET para la página de registro
+    // Gestionar les sol·licituds GET per a la pàgina de registre
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Redirigir la solicitud a la página JSP de registro
+        // Redirigir la sol·licitud a la pàgina JSP de registre
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
         dispatcher.forward(req, resp);
     }
 
-    // Manejar las solicitudes POST al enviar el formulario de registro
+    // Gestionar les sol·licituds POST en enviar el formulari de registre
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Obtener los datos del usuario desde el formulario de registro
+        // Obtindre les dades de l'usuari des del formulari de registre
         String nameAndLastName = req.getParameter("nameAndLastName");
         String userName = req.getParameter("userName");
         String password = req.getParameter("password");
 
-        // Inicializar UserServices para interactuar con funcionalidades relacionadas con el usuario
+        // Inicialitzar UserServices per interactuar amb funcionalitats relacionades amb l'usuari
         UserServices userServices = new UserServices();
 
-        // Crear un objeto User con la información proporcionada
+        // Crear un objecte User amb la informació proporcionada
         User user = new User(userName, nameAndLastName, password);
 
-        // Validar la contraseña utilizando una expresión regular
+        // Validar la contrasenya utilitzant una expressió regular
         String regex = "^(?!.*\\s).{5,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
 
         try {
-            // Verificar si la contraseña es válida; si no lo es, lanzar una excepción
+            // Verificar si la contrasenya és vàlida; si no ho és, llançar una excepció
             if (!matcher.matches()) {
                 throw new PasswordNotValid();
             }
         } catch (PasswordNotValid pnv) {
-            // Manejar la excepción configurando un atributo de error y redirigiendo a la página de registro
-            req.setAttribute("error", "Contraseña no válida, mínimo 5 dígitos y sin espacios");
+            // Gestionar l'excepció configurant un atribut d'error i redirigint a la pàgina de registre
+            req.setAttribute("error", "Invalid password, min 5 digits and no spaces");
             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
             dispatcher.forward(req, resp);
-            // Detener el procesamiento para evitar el registro del usuario
+            // Aturar el processament per evitar el registre de l'usuari
             return;
         }
 
         try {
-            // Intentar registrar al usuario; si tiene éxito, redirigir a la página de inicio de sesión
+            // Intentar registrar l'usuari; si té èxit, redirigir a la pàgina d'inici de sessió
             userServices.register(user);
             resp.sendRedirect("/login");
         } catch (UserExist userExist) {
-            // Manejar la excepción para un usuario existente configurando un atributo de error y redirigiendo a la página de registro
-            req.setAttribute("error", "El usuario ya existe");
+            // Gestionar l'excepció per a un usuari existent configurant un atribut d'error i redirigint a la pàgina de registre
+            req.setAttribute("error", "User already exist");
             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
             dispatcher.forward(req, resp);
         }

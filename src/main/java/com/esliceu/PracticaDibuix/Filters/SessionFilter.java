@@ -18,14 +18,14 @@ public class SessionFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        // Obtener la sesión actual
+        // Obtenir la sessió actual
         HttpSession session = req.getSession();
-        // Obtener el usuario de la sesión
+        // Obtenir l'usuari de la sessió
         User user = (User) session.getAttribute("user");
 
-        // Verificar si el usuario está autenticado (si no hay un usuario en la sesión)
+        // Verificar si l'usuari està autenticat (si no hi ha un usuari a la sessió)
         if (user == null) {
-            // Redirigir a la página de inicio de sesión si el usuario no está autenticado
+            // Redirigir a la pàgina d'inici de sessió si l'usuari no està autenticat
             res.sendRedirect("/login");
             return;
         }

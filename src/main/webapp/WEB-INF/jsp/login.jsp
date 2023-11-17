@@ -9,6 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+      <link rel="stylesheet" href="/css/styles.css">
       <title>Login</title>
     </head>
 
@@ -23,14 +24,16 @@
               <form action="/login" method="post">
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form1Example13">Username</label>
-                  <input type="text" id="form1Example13" class="form-control form-control-lg" name="username" />
+                  <input type="text" id="form1Example13" class="form-control form-control-lg" name="username" required/>
                 </div>
 
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form1Example23">Password</label>
-                  <input type="password" id="form1Example23" class="form-control form-control-lg" name="password" />
+                  <input type="password" id="form1Example23" class="form-control form-control-lg" name="password" required/>
                   <c:if test="${!empty error}">
-                    ${error}
+                    <p class="error">
+                        ${error}
+                    </p>
                   </c:if>
                 </div>
 

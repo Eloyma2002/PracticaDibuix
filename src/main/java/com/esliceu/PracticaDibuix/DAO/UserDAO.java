@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface UserDAO {
 
-    void saveUser (User user) throws UserExist;
+    void saveUser(User user) throws UserExist;
 
-    User getUser (String userName, String password) throws UserDoesntExist;
-
-    void sessionCookie(HttpServletRequest req, HttpServletResponse resp);
+    User getUser(String userName, String password) throws UserDoesntExist;
 }

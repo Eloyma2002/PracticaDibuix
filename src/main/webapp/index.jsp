@@ -7,7 +7,7 @@
 </head>
 <body>
     <script>
-        window.location.replace("/login")
+        window.location.replace("/register")
     </script>
 </body>
 </html>

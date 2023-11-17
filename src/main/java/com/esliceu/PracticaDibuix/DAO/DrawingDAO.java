@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface DrawingDAO {
 
-    void save (Drawing dr);
+    boolean save(Drawing dr);
 
-    List<Drawing> loadAllLists ();
+    List<Drawing> loadAllLists();
 
     List<Drawing> loadMyList(User user);
 
-    void deleteDrawing(int id, User user);
+    boolean deleteDrawing(int id, User user);
 
     Drawing getDrawing(int id);
 
-    void modifyFigures(int id, String figures, String newName, int size);
+    boolean modifyFigures(int id, String figures, String newName, int size, User user);
 
 
 }
